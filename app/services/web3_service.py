@@ -119,7 +119,7 @@ def mint_receipt(
                 "from": account.address,
                 "nonce": nonce,
                 "chainId": settings.chain_id,
-                "gas": 500_000,
+                "gas": 1_500_000,
                 "gasPrice": w3.eth.gas_price,
             }
         )

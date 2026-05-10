@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Path, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
@@ -14,10 +14,16 @@ from app.models.schemas import (
     AnalyzeResponse,
     MintRequest,
     MintResponse,
+    ReportLookupResponse,
 )
 from app.services.ai_service import generate_report
 from app.services.evidence_service import enrich_report
-from app.services.storage_service import save_metadata, save_report
+from app.services.storage_service import (
+    StorageServiceError,
+    load_report_by_hash,
+    save_metadata,
+    save_report,
+)
 from app.services.web3_service import Web3ServiceError, mint_receipt
 
 logging.basicConfig(
@@ -93,6 +99,38 @@ async def _run_analysis(product_name: str, brand: str, product_url: str) -> dict
 async def health():
     """Liveness check."""
     return {"status": "ok", "ai_mode": settings.ai_mode}
+
+
+@app.get(
+    "/api/reports/{report_hash}",
+    response_model=ReportLookupResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Load a locally stored report by report hash",
+    tags=["Reports"],
+)
+async def get_report_by_hash(
+    report_hash: str = Path(..., pattern=r"^0x[0-9a-fA-F]{64}$"),
+) -> ReportLookupResponse:
+    """
+    Read the full local report JSON using the reportHash found in NFT metadata.
+
+    Reports are intentionally kept local even when metadata is pinned to IPFS.
+    """
+    try:
+        result = load_report_by_hash(report_hash)
+    except StorageServiceError as exc:
+        logger.error("report lookup failed: %s", exc)
+        raise HTTPException(status_code=409, detail=str(exc))
+
+    if result is None:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    report_dict, report_uri = result
+    return ReportLookupResponse(
+        reportHash=report_hash.lower(),
+        reportURI=report_uri,
+        report=report_dict,
+    )
 
 
 @app.post(

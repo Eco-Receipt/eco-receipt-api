@@ -1,0 +1,28 @@
+{
+  "name": "Green Receipt - Nike Pegasus Trail 5 DV3865-602",
+  "description": "AI-generated environmental forensic receipt anchored on Monad",
+  "image": "",
+  "attributes": [
+    {
+      "trait_type": "Brand",
+      "value": "Nike"
+    },
+    {
+      "trait_type": "Score",
+      "value": 62
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Medium Risk"
+    },
+    {
+      "trait_type": "Evidence Root",
+      "value": "0xbf8cebc3760ad1bfa43418fa8222e1052e91184644d06f8a22c6396864bc53f6"
+    },
+    {
+      "trait_type": "Report Hash",
+      "value": "0x52ad28ca7ff7bdd73909eea4ce8afd681bdcbb1aaa5e7e82b381e81209654ea4"
+    }
+  ],
+  "reportURI": "ipfs://QmX3A4tNpRBpYcJKrdPWE92UnDSKr23sAcNKoxJdLpSjwz"
+}

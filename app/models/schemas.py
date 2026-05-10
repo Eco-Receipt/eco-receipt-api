@@ -102,6 +102,12 @@ class AnalyzeAndMintResponse(BaseModel):
     contractAddress: str
 
 
+class ReportLookupResponse(BaseModel):
+    reportHash: str
+    reportURI: str
+    report: GreenReport
+
+
 class ErrorResponse(BaseModel):
     detail: str
     code: str = "INTERNAL_ERROR"

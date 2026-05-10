@@ -24,7 +24,11 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
 
     # Storage
-    storage_backend: str = "local"  # "local" | "ipfs"
+    storage_backend: str = "local"  # "local" | "pinata"
+    pinata_api_key: str = ""
+    pinata_secret_api_key: str = ""
+    pinata_jwt: str = ""
+    pinata_api_url: str = "https://api.pinata.cloud/pinning/pinJSONToIPFS"
 
     # App
     app_host: str = "0.0.0.0"
@@ -46,7 +50,7 @@ class Settings(BaseSettings):
 
     @property
     def abi_path(self) -> Path:
-        return BASE_DIR.parent / "abi" / "GreenReceiptNFT.json"
+        return BASE_DIR.parent / "abi" / "EcoReceiptNFT.abi.json"
 
 
 settings = Settings()
